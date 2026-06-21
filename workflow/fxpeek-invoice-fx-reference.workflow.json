@@ -1,0 +1,95 @@
+{
+  "name": "FXpeek invoice historical FX reference",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "manual-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: { invoice_number: 'INV-1001', invoice_date: '2025-01-31', total: 1250.5, currency: 'USD', reporting_currency: 'IDR' } }];"
+      },
+      "id": "sample-invoice",
+      "name": "Sample invoice row",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "url": "=https://fxpeek.com/api/history?from={{$json.currency}}&to={{$json.reporting_currency}}&days=30",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "fxpeek-history",
+      "name": "FXpeek history API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [500, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const invoice = $('Sample invoice row').first().json;\nconst history = $json;\nreturn [{\n  json: {\n    ...invoice,\n    fxpeek_pair: `${invoice.currency}/${invoice.reporting_currency}`,\n    fxpeek_reference_url: 'https://fxpeek.com/en/api?utm_source=github&utm_medium=repo&utm_campaign=fxpeek_n8n_invoice_fx_workflow&utm_content=workflow_json',\n    fxpeek_rate_context: 'Reference historical FX data, not a transaction quote.',\n    fxpeek_history_sample: history\n  }\n}];"
+      },
+      "id": "merge-rate-context",
+      "name": "Merge invoice and FX context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [760, 0]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Sample invoice row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sample invoice row": {
+      "main": [
+        [
+          {
+            "node": "FXpeek history API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FXpeek history API": {
+      "main": [
+        [
+          {
+            "node": "Merge invoice and FX context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-06-21T00:00:00.000Z",
+  "versionId": "fxpeek-n8n-invoice-fx-reference"
+}
+
