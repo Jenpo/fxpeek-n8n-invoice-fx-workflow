@@ -1,4 +1,4 @@
-# FXpeek n8n Invoice FX Workflow
+# FXpeek.com n8n Invoice FX Workflow
 
 This repository contains a small n8n workflow pattern for adding historical exchange-rate reference data to invoice extraction flows.
 
@@ -87,3 +87,4 @@ If an invoice workflow already extracts `date`, `total`, and `currency`, the mis
 | Thai | https://fxpeek.com/th/api?utm_source=github&utm_medium=repo&utm_campaign=fxpeek_n8n_invoice_fx_workflow&utm_content=th_api | https://fxpeek.com/th/stablecoin?utm_source=github&utm_medium=repo&utm_campaign=fxpeek_n8n_invoice_fx_workflow&utm_content=th_stablecoin |
 | Tagalog | https://fxpeek.com/tl/api?utm_source=github&utm_medium=repo&utm_campaign=fxpeek_n8n_invoice_fx_workflow&utm_content=tl_api | https://fxpeek.com/tl/stablecoin?utm_source=github&utm_medium=repo&utm_campaign=fxpeek_n8n_invoice_fx_workflow&utm_content=tl_stablecoin |
 
+FXpeek.com
